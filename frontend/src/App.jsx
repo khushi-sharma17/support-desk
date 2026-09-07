@@ -983,6 +983,44 @@ function App() {
                             {ticket.status || 'Unknown'}
                           </div>
 
+                          <div
+                            className={`ticket-sla ${
+                              ticket.is_sla_breached
+                                ? 'ticket-sla-breached'
+                                : ticket.sla_status === 'within_sla'
+                                  ? 'ticket-sla-within'
+                                  : ticket.sla_status === 'resolved'
+                                    ? 'ticket-sla-resolved'
+                                    : 'ticket-sla-none'
+                            }`}
+                          >
+                            {ticket.is_sla_breached
+                              ? 'SLA Breached'
+                              : ticket.sla_status === 'within_sla'
+                                ? 'Within SLA'
+                                : ticket.sla_status === 'resolved'
+                                  ? 'Resolved'
+                                  : '-'}
+                          </div>
+
+                          
+                          <div
+                            className={`ticket-escalation ${
+                              ticket.escalation_status === 'escalated'
+                                ? 'ticket-escalation-danger'
+                                : ticket.escalation_status === 'at_risk'
+                                  ? 'ticket-escalation-warning'
+                                  : 'ticket-escalation-none'
+                            }`}
+                          >
+                            {ticket.escalation_status === 'escalated'
+                              ? 'Escalated'
+                              : ticket.escalation_status === 'at_risk'
+                                ? 'At Risk'
+                                : ''}
+                          </div>
+
+
                           <div className="ticket-date">
                             {ticket.created_at || '-'}
                           </div>
@@ -1294,6 +1332,43 @@ function App() {
 
                       <div className="ticket-status">
                         {ticket.status || 'Unknown'}
+                      </div>
+
+                      <div
+                        className={`ticket-sla ${
+                          ticket.is_sla_breached
+                            ? 'ticket-sla-breached'
+                            : ticket.sla_status === 'within_sla'
+                              ? 'ticket-sla-within'
+                              : ticket.sla_status === 'resolved'
+                                ? 'ticket-sla-resolved'
+                                : 'ticket-sla-none'
+                        }`}
+                      >
+                        {ticket.is_sla_breached
+                          ? 'SLA Breached'
+                          : ticket.sla_status === 'within_sla'
+                            ? 'Within SLA'
+                            : ticket.sla_status === 'resolved'
+                              ? 'Resolved'
+                              : '-'}
+                      </div>
+
+                      
+                      <div
+                        className={`ticket-escalation ${
+                          ticket.escalation_status === 'escalated'
+                            ? 'ticket-escalation-danger'
+                            : ticket.escalation_status === 'at_risk'
+                              ? 'ticket-escalation-warning'
+                              : 'ticket-escalation-none'
+                        }`}
+                      >
+                        {ticket.escalation_status === 'escalated'
+                          ? 'Escalated'
+                          : ticket.escalation_status === 'at_risk'
+                            ? 'At Risk'
+                            : ''}
                       </div>
 
 

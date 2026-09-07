@@ -79,7 +79,7 @@ class TicketController extends ActiveController
                  */
                 [
                     'allow' => true,
-                    'actions' => ['index', 'view'],
+                    'actions' => ['index', 'view', 'escalations'],
                     'matchCallback' => function () {
                         return Yii::$app->user->identity !== null
                             && in_array(
@@ -529,6 +529,74 @@ class TicketController extends ActiveController
             ];
         }
     }
+
+
+    /**
+     * Get tickets that require escalation.
+     *
+     * GET /v1/ticket/escalations
+     *
+     * Returns:
+     * - at_risk tickets
+     * - escalated tickets
+     *
+     * Admin:
+     *   Can see all escalation tickets.
+     *
+     * Agent:
+     *   Can only see escalation tickets assigned to themselves.
+     */
+    public function actionEscalations()
+    {
+        $user = Yii::$app->user->identity;
+
+        $query = Ticket::find()
+            ->where([
+                'not in',
+                'status',
+                ['resolved'],
+            ]);
+
+        /*
+        * Agents can only see their own tickets.
+        */
+        if ($user->role === 'agent') {
+            $query->andWhere([
+                'assigned_to' => $user->id,
+            ]);
+        }
+
+        /*
+        * Get active tickets.
+        */
+        $tickets = $query
+            ->orderBy([
+                'due_at' => SORT_ASC,
+            ])
+            ->all();
+
+        /*
+        * Keep only tickets that are
+        * at risk or already escalated.
+        */
+        $escalatedTickets = array_filter(
+            $tickets,
+            function ($ticket) {
+                return in_array(
+                    $ticket->getEscalationStatus(),
+                    ['at_risk', 'escalated'],
+                    true
+                );
+            }
+        );
+
+        return [
+            'success' => true,
+            'count' => count($escalatedTickets),
+            'tickets' => array_values($escalatedTickets),
+        ];
+    }
+
 
 
     /**

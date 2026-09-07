@@ -662,3 +662,65 @@
     white-space: normal;
   }
 }
+
+
+
+
+
+
+
+.sla-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.sla-within_sla {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.sla-breached {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.sla-resolved {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.sla-no_deadline,
+.sla-unknown {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+
+
+
+
+.escalation-normal {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.escalation-at_risk {
+  background: #fffbeb;
+  color: #b45309;
+}
+
+.escalation-escalated {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.escalation-not_required,
+.escalation-none {
+  background: #f3f4f6;
+  color: #6b7280;
+}

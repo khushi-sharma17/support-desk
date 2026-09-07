@@ -825,6 +825,60 @@ function TicketDetail({ ticketId, token, onBack }) {
           </div>
 
 
+
+          <div className="ticket-detail-row">
+            <strong>SLA</strong>
+
+            <span>
+              {ticket.sla_hours
+                ? `${ticket.sla_hours} hours`
+                : '-'}
+            </span>
+          </div>
+
+          <div className="ticket-detail-row">
+            <strong>Due At</strong>
+
+            <span>
+              {ticket.due_at || '-'}
+            </span>
+          </div>
+
+          <div className="ticket-detail-row">
+            <strong>SLA Status</strong>
+
+            <span
+              className={`sla-status sla-${ticket.sla_status || 'unknown'}`}
+            >
+              {ticket.sla_status === 'within_sla'
+                ? 'Within SLA'
+                : ticket.sla_status === 'breached'
+                  ? 'SLA Breached'
+                  : ticket.sla_status === 'resolved'
+                    ? 'Resolved'
+                    : 'No Deadline'}
+            </span>
+          </div>
+
+
+
+          <div className="ticket-detail-row">
+            <strong>Escalation</strong>
+            <span
+              className={`sla-status escalation-${ticket.escalation_status || 'none'}`}
+            >
+              {ticket.escalation_status === 'escalated'
+                ? 'Escalated'
+                : ticket.escalation_status === 'at_risk'
+                  ? 'At Risk'
+                  : ticket.escalation_status === 'normal'
+                    ? 'Normal'
+                    : 'Not Required'}
+            </span>
+          </div>
+
+
+
           {/* =========================
               ASSIGNMENT
             ========================= */}

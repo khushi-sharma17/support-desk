@@ -976,3 +976,78 @@ select {
     font-size: 13px;
   }
 }
+
+
+
+
+
+
+/* =========================
+   TICKET SLA
+========================= */
+
+.ticket-sla {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.ticket-sla-within {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.ticket-sla-breached {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.ticket-sla-resolved {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.ticket-sla-none {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+
+
+
+
+
+/* =========================
+   TICKET ESCALATION
+========================= */
+
+.ticket-escalation {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 70px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.ticket-escalation-danger {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.ticket-escalation-warning {
+  background: #fffbeb;
+  color: #b45309;
+}
+
+.ticket-escalation-none {
+  visibility: hidden;
+}

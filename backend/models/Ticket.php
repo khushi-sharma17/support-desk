@@ -106,6 +106,100 @@ class Ticket extends \yii\db\ActiveRecord
         ];
     }
 
+
+
+    public function getSlaHours()
+    {
+        return match ($this->priority) {
+            'low' => 72,
+            'medium' => 48,
+            'high' => 24,
+            'critical' => 8,
+            default => 48,
+        };
+    }
+
+
+    public function calculateDueAt()
+    {
+        if (empty($this->created_at)) {
+            return null;
+        }
+
+        return date(
+            'Y-m-d H:i:s',
+            strtotime($this->created_at . ' +' . $this->getSlaHours() . ' hours')
+        );
+    }
+
+
+    public function getSlaStatus()
+    {
+        if ($this->status === 'resolved' || !empty($this->resolved_at)) {
+            return 'resolved';
+        }
+
+        if (empty($this->due_at)) {
+            return 'no_deadline';
+        }
+
+        if (strtotime($this->due_at) < time()) {
+            return 'breached';
+        }
+
+        return 'within_sla';
+    }
+
+    public function getIsSlaBreached()
+    {
+        return $this->getSlaStatus() === 'breached';
+    }
+
+
+
+    public function getEscalationStatus()
+    {
+        if ($this->status === 'resolved' || !empty($this->resolved_at)) {
+            return 'not_required';
+        }
+
+        if ($this->getIsSlaBreached()) {
+            return 'escalated';
+        }
+
+        if (empty($this->due_at)) {
+            return 'not_required';
+        }
+
+        $remainingSeconds = strtotime($this->due_at) - time();
+
+        // Escalate when less than 25% of the SLA time remains.
+        $escalationThreshold = $this->getSlaHours() * 3600 * 0.25;
+
+        if ($remainingSeconds <= $escalationThreshold) {
+            return 'at_risk';
+        }
+
+        return 'normal';
+    }
+
+
+
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+
+        // Set SLA due time when ticket is created
+        if ($insert) {
+            $this->due_at = $this->calculateDueAt();
+        }
+
+        return true;
+    }
+
+
     public function attributeLabels()
     {
         return [
@@ -125,6 +219,30 @@ class Ticket extends \yii\db\ActiveRecord
             'resolved_at' => 'Resolved At',
             'resolution_notes' => 'Resolution Notes',
         ];
+    }
+
+
+    public function fields()
+    {
+        $fields = parent::fields();
+
+        $fields['sla_status'] = function ($model) {
+            return $model->getSlaStatus();
+        };
+
+        $fields['is_sla_breached'] = function ($model) {
+            return $model->getIsSlaBreached();
+        };
+
+        $fields['sla_hours'] = function ($model) {
+            return $model->getSlaHours();
+        };
+
+        $fields['escalation_status'] = function ($model) {
+            return $model->getEscalationStatus();
+        };
+
+        return $fields;
     }
 
     public function extraFields()
