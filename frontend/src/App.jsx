@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import TicketDetail from './pages/TicketDetail'
 import CreateTicket from './pages/CreateTicket'
+import Analytics from './pages/Analytics'
 
 
 const API_BASE_URL = 'http://localhost/support-desk/backend/web/v1'
@@ -555,9 +556,18 @@ function App() {
           </button>
 
 
-          <button className="nav-item">
+          <button
+            className={`nav-item ${
+              currentPage === 'analytics'
+                ? 'active'
+                : ''
+            }`}
+            onClick={() =>
+              setCurrentPage('analytics')
+            }
+          >
             <span>▥</span>
-            Reports
+            Analytics
           </button>
 
         </nav>
@@ -1389,6 +1399,15 @@ function App() {
           </section>
 
         )}
+
+
+        {currentPage === 'analytics' && (
+          <Analytics
+            token={token}
+            user={user}
+          />
+        )}
+
 
 
         {currentPage === 'ticket-detail' && selectedTicketId && (

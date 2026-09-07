@@ -125,6 +125,15 @@ $config = [
                         'OPTIONS' => 'options',
                     ],
                 ],
+
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['v1/dashboard'],
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'GET' => 'index',
+                    ],
+                ],
             ],
         ],
     ],
